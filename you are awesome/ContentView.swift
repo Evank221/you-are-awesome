@@ -18,27 +18,32 @@ struct ContentView: View {
        
         VStack {
             Spacer()
+            
+            Text(message)
+            .font(.largeTitle)
+            .fontWeight(.heavy)
+            .foregroundStyle(.red)
+            .multilineTextAlignment(.center)
+            .minimumScaleFactor(0.5)
+            .frame(height: 120)
+            .animation(.easeInOut(duration: 0.15), value: message)
+            
             Image(imageName)
                 .resizable()
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 30))
                 .shadow(radius: 30)
-            
-                Text(message)
-                .font(.largeTitle)
-                .fontWeight(.heavy)
-                .foregroundStyle(.red)
-                .multilineTextAlignment(.center)
+                .animation(.default, value: imageName)
             
             Spacer()
             
             Button("show message!"){
-                let messages = ["you are awesome!" ,
+                let messages = ["you are awesome!",
+                                "when the genius bar needs help, they call you",
                                 "you are great!" ,
                                 "you are fantastic!" ,
                                 "fabulous? that's you!" ,
-                                "you make me smile!" ,
-                                "when the genius bar needs help, they call you"]
+                                "you make me smile!"]
                 
                 message = messages [messagenumber]
                 messagenumber += 1
