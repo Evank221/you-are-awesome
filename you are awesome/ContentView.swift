@@ -11,8 +11,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var message = ""
     @State private var imageName = ""
-    @State private var imagenumber = 0
-    @State private var messagenumber = 0
+    @State private var lastimagenumber = -1
+    @State private var lastmessagenumber = -1 // will never be -1
     
     var body: some View {
        
@@ -45,10 +45,23 @@ struct ContentView: View {
                                 "fabulous? that's you!" ,
                                 "you make me smile!"]
                 
-                message = messages [Int.random(in: 0...messages.count-1)]
+            
                 
-                imageName = "image\(Int.random(in: 0...9))"
+                var messagenumber = Int.random(in: 0...messages.count-1)
+                repeat{
+                        messagenumber = Int.random(in: 0...messages.count-1)
+                } while messagenumber == lastmessagenumber
                 
+                message = messages[messagenumber]
+                lastmessagenumber = messagenumber
+                
+                var imagenumber = Int.random(in: 0...9)
+                repeat {
+                    imagenumber = Int.random(in: 0...9)
+                } while imagenumber == lastimagenumber
+                
+                imageName = "image\(imagenumber)"
+                lastimagenumber = imagenumber
             }
             .buttonStyle(.borderedProminent)
             .font(.title2)
