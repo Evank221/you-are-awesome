@@ -13,7 +13,9 @@ struct ContentView: View {
     @State private var imageName = ""
     @State private var imagenumber = 0
     @State private var messagenumber = 0
+    
     var body: some View {
+       
         VStack {
             Spacer()
             Image(imageName)
@@ -31,16 +33,16 @@ struct ContentView: View {
             Spacer()
             
             Button("show message!"){
-                let messages = ["you are awesome!",
-                                "you are great!",
-                                "you are fantastic!",
-                                "fabulous? that's you!",
-                                "you make me smile!",
+                let messages = ["you are awesome!" ,
+                                "you are great!" ,
+                                "you are fantastic!" ,
+                                "fabulous? that's you!" ,
+                                "you make me smile!" ,
                                 "when the genius bar needs help, they call you"]
                 
-                message = messages[messagenumber]
+                message = messages [messagenumber]
                 messagenumber += 1
-                if messagenumber == message.count {
+                if messagenumber == messages.count {
                     messagenumber = 0
                 }
                 
