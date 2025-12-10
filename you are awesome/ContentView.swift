@@ -16,22 +16,23 @@ struct ContentView: View {
     @State private var lastmessagenumber = -1 // will never be -1
     @State private var lastsoundnumber = -1
     @State private var audioplayer: AVAudioPlayer!
+    @State private var soundIsOn = true
     let numberofimg = 10 // img labels
     let numberofsounds = 6 //sounds labels
     
     var body: some View {
-       
+        
         VStack {
             Spacer()
             
             Text(message)
-            .font(.largeTitle)
-            .fontWeight(.heavy)
-            .foregroundStyle(.red)
-            .multilineTextAlignment(.center)
-            .minimumScaleFactor(0.5)
-            .frame(height: 120)
-            .animation(.easeInOut(duration: 0.15), value: message)
+                .font(.largeTitle)
+                .fontWeight(.heavy)
+                .foregroundStyle(.red)
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.5)
+                .frame(height: 120)
+                .animation(.easeInOut(duration: 0.15), value: message)
             
             Spacer()
             
@@ -44,25 +45,42 @@ struct ContentView: View {
             
             Spacer()
             
-            Button("show message!"){
-                let messages = ["you are awesome!",
-                                "when the genius bar needs help, they call you",
-                                "you are great!" ,
-                                "you are fantastic!" ,
-                                "fabulous? that's you!" ,
-                                "you make me smile!"]
+            HStack {
+                Text("sound on")
+                Toggle("", isOn: $soundIsOn)
+                    .labelsHidden()
+                    .border(.blue)
+                    .onChange(of: soundIsOn) {
+                        if audioplayer != nil && audioplayer.isPlaying {
+                            audioplayer.stop()
+                        }
+                    }
                 
-                lastmessagenumber = nonRepeatingRandom(lastnumber: lastmessagenumber, upperBound: messages.count-1)
-                message = messages[lastmessagenumber]
+                Spacer()
                 
-                lastimagenumber = nonRepeatingRandom(lastnumber: lastimagenumber, upperBound: numberofimg-1)
-                imageName = "image\(lastimagenumber)"
-                
-                lastsoundnumber = nonRepeatingRandom(lastnumber: lastsoundnumber, upperBound: numberofsounds-1)
-                playSound(soundName: "sound\(lastsoundnumber)")
+                Button("show message!"){
+                    let messages = ["you are awesome!",
+                                    "when the genius bar needs help, they call you",
+                                    "you are great!" ,
+                                    "you are fantastic!" ,
+                                    "fabulous? that's you!" ,
+                                    "you make me smile!"]
+                    
+                    lastmessagenumber = nonRepeatingRandom(lastnumber: lastmessagenumber, upperBound: messages.count-1)
+                    message = messages[lastmessagenumber]
+                    
+                    lastimagenumber = nonRepeatingRandom(lastnumber: lastimagenumber, upperBound: numberofimg-1)
+                    imageName = "image\(lastimagenumber)"
+                    
+                    lastsoundnumber = nonRepeatingRandom(lastnumber: lastsoundnumber, upperBound: numberofsounds-1)
+                    
+                    if soundIsOn {
+                        playSound(soundName: "sound\(lastsoundnumber)")
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .font(.title2)
             }
-            .buttonStyle(.borderedProminent)
-            .font(.title2)
         }
         .padding()
     }
@@ -77,8 +95,11 @@ struct ContentView: View {
     }
     
     func playSound(soundName: String){
+        if audioplayer != nil && audioplayer.isPlaying {
+            audioplayer.stop()
+        }
         guard let soundFile = NSDataAsset(name: soundName) else {
-        print("😡 could not read file named \(soundName)")
+            print("😡 could not read file named \(soundName)")
             return
         }
         do {
